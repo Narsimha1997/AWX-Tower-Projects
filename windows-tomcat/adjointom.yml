@@ -1,0 +1,24 @@
+- name: "Install Tomcat on Windows"
+  hosts: all
+  tasks:
+    - name: Download Tomcat
+      win_get_url:
+        url: http://mirror.fibergrid.in/apache/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.zip
+        dest: C:\temp\tomcat.zip     
+    - name: Unzip Tomcat
+      win_unzip:
+        src: C:\temp\tomcat.zip
+        dest: C:\Program Files     
+    - name: Set Environment Variable
+      win_environment:
+        name: CATALINA_HOME
+        value: C:\Program Files\apache-tomcat-9.0.38     
+    - name: Start Tomcat as a Service
+      win_shell: "{{ CATALINA_HOME }}\\bin\\service.bat install"
+      register: result     
+    - name: Check Service Status
+      win_shell: "sc queryex ApacheTomcat9"
+      register: tomcat_status     
+    - name: Debug Service Status
+      debug:
+        var: tomcat_status.stdout_lines

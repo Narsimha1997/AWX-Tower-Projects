@@ -1,0 +1,47 @@
+---
+- name: Install Java and Tomcat on Windows
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Download Java
+      win_get_url:
+        url: https://download.oracle.com/java/19/latest/jdk-19_windows-x64_bin.msi
+        dest: C:\jdk-19_windows-x64_bin.msi
+        headers:
+          "Cookie": "oraclelicense=accept-securebackup-cookie"
+
+    - name: Install Java
+      win_package:
+        path:  C:\jdk-19_windows-x64_bin.msi
+        product_id: '{26A24AE4-039D-4CA4-87B4-2F83218065F0}'
+        state: present
+
+    - name: Download Tomcat
+      win_get_url:
+        url: https://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63-windows-x64.zip
+        dest: C:\apache-tomcat-9.0.63-windows-x64.zip
+
+    - name: Extract Tomcat
+      win_unzip:
+        src: C:\apache-tomcat-9.0.63-windows-x64.zip
+        dest: C:\
+    - name: Set JAVA_HOME environment variable
+      win_environment:
+        name: JAVA_HOME
+        value: C:\Program Files\Java\jdk-19
+        level: machine
+
+    - name: Set CATALINA_HOME environment variable
+      win_environment:
+        name: CATALINA_HOME
+        value: C:\apache-tomcat-9.0.63
+        level: machine
+    - name: Install Tomcat Service
+      win_shell:
+        ansible_connection: winrm
+        path: C:\apache-tomcat-9.0.63\bin
+        executable: cmd.exe
+        creates: C:\Windows\System32\ApacheTomcat9w.exe
+        _raw_params:
+          - /c
+          - service.bat install ApacheTomcat9

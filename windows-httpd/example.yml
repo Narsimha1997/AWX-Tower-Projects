@@ -1,0 +1,9 @@
+- name: authenticate with a Vault app role
+  hosts: localhost
+  tasks:
+#  - name: Authenticate with a Vault app role
+ #   ansible.builtin.debug:
+  #     msg: "{{ lookup('community.general.vault', 'secret==secrets/creds/ad-windows auth_method=approle role_id=ac833aef-4ad5-7533-0f4a-c6b96d33a8bb secret_id=a324116e-2909-bebc-02bc-407336810b8a') }}"
+   - name: get
+     debug: 
+        msg: "{{ lookup('hashi_vault', 'secret=secrets/creds/ad-windows role_id=ac833aef-4ad5-7533-0f4a-c6b96d33a8bb secret_id=a324116e-2909-bebc-02bc-407336810b8a url=http://23.21.13.121:8200')}}"

@@ -1,0 +1,37 @@
+---
+- name: Install Apache Tomcat on Windows
+  hosts: all
+  gather_facts: yes
+  
+  tasks:
+  - name: Download Apache Tomcat
+    win_get_url:
+      url: https://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.62/bin/apache-tomcat-9.0.62.zip
+      dest: C:\Users\Administrator\Downloads\apache-tomcat-9.0.62.zip
+
+  - name: Extract Apache Tomcat
+    win_unzip:
+      src: C:\Users\Administrator\Downloads\apache-tomcat-9.0.62.zip
+      dest: C:\tomcat
+
+        # - name: Set environment variables
+        #win_environment:
+        #name: CATALINA_HOME
+        #value: C:\tomcat\apache-tomcat-9.0.62
+        #state: present
+      
+  - name: Start Apache Tomcat
+    win_command: C:\tomcat\apache-tomcat-9.0.62\bin\startup.bat
+    register: tomcat_start
+    
+  - name: Check Apache Tomcat status
+    win_shell: echo %CATALINA_HOME%
+    register: tomcat_env
+    
+  - name: Show Apache Tomcat environment variables
+    debug:
+      var: tomcat_env
+      
+  - name: Show Apache Tomcat start status
+    debug:
+      var: tomcat_start

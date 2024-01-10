@@ -1,0 +1,38 @@
+---
+- name: Install packages on Linux systems
+  hosts: all
+    #become: yes
+  vars:
+    packages:
+      - { name: curl, state: latest, enabled: false }
+      - { name: git, state: latest, enabled: false }
+      - { name: vim, state: latest, enabled: false }
+      - { name: htop, state: latest, enabled: false }
+      - { name: tree, state: latest, enabled: true }
+
+  tasks:
+  - name: Update the package index
+    package:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - update-notifier-common
+      - python
+      - python-apt
+
+  - name: Install required packages
+    package:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+    when: item.enabled
+    loop: "{{ packages }}"
+
+  - name: Check the version of installed packages
+    command: dpkg -s "{{ item.name }}"
+    register: result
+    when: item.enabled
+    loop: "{{ packages }}"
+
+  - name: Display the version of installed packages
+    debug:
+      var: result.stdout_lines

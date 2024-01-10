@@ -1,0 +1,34 @@
+---
+- name: Install Apache Web Server
+  hosts: all
+  gather_facts: yes
+  tasks:
+  - name: Determine OS type
+    set_fact:
+      os_type: "{{ ansible_os_family }}"
+
+  - name: Install Apache on Ubuntu
+    become: yes
+    when: os_type == "Debian"
+    apt:
+      update_cache: true
+      cache_valid_time: 3600
+      force_apt_get: true
+      name: apache2
+      state: present
+
+  - name: Install Apache on Amazon Linux
+    become: yes
+    when: os_type == "RedHat"
+    yum:
+      name: httpd
+      state: present
+
+  - name: Start Apache service
+    become: yes
+    service:
+      name: "{{ apache_service }}"
+      state: started
+    vars:
+      apache_service: "{{ 'apache2' if os_type == 'Debian' else 'httpd' }}"
+

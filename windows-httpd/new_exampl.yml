@@ -1,0 +1,6 @@
+- name: Return secret
+  hosts: localhost
+  tasks:
+  - name: get secret
+    debug:
+      msg: "{{ lookup('hashi_vault', 'secret=secrets/creds/ad-windows:secret token=s.4dxmbj9pLLXoarVua8o2A4xH url=http://23.21.13.121:8200')}}"

@@ -1,0 +1,18 @@
+- name: get password
+  hosts: localhost
+  vars:
+    vault_token: s.4dxmbj9pLLXoarVua8o2A4xH
+  tasks:
+   - name: api call
+     ansible.builtin.uri:
+       url: http://23.21.13.121:8200/v1/secrets/creds/ad-windows
+       method: GET
+       headers:
+         X-Vault-Token: "{{ vault_token }}"
+       body: {"data":{"key":"value"}}
+       body_format: json
+       return_content: yes
+     register: response
+   - debug:
+       msg: "{{ response.content.msg }}"
+       

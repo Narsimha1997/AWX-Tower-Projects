@@ -1,0 +1,21 @@
+---
+- name: Install Apache HTTP Server on Windows
+  hosts: all
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Install Chocolatey
+      win_chocolatey:
+        name: chocolatey
+        state: present
+
+    - name: Install Apache HTTP Server
+      win_chocolatey:
+        name: apache-httpd
+        state: present
+
+    - name: Start Apache service
+      win_service:
+        name: Apache
+        state: started
+

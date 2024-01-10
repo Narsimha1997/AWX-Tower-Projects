@@ -1,0 +1,30 @@
+- name: Retrieve authentication token from Vault
+  hosts: localhost
+  gather_facts: no
+  collections:
+    - ansible_collections.hashicorp.vault
+  tasks:
+    - set_fact:
+        vault_token: "{{ lookup('hashi_vault', 'secret=ansible/token password=s.4dxmbj9pLLXoarVua8o2A4xH') }}"
+
+- name: Authenticate to Vault
+  hosts: localhost
+  tasks:
+    - name: Authenticate with token
+      vault_auth:
+        method: token
+        token: "{{ vault_token }}"
+
+- name: Retrieve password from Vault
+  hosts: localhost
+  tasks:
+    - name: Retrieve password
+      set_fact:
+        my_password: "{{ lookup('hashi_vault', 'secret=ansible/password key=secret') }}"
+
+- name: Use password in playbook
+  hosts: localhost
+  tasks:
+    - name: Print password
+      debug:
+        var: my_password
