@@ -3,7 +3,7 @@
   hosts: all # Replace with your target hosts or group name
   tasks:
     - name: Update the System Packages
-      yum:
+      dnf:
         name: "*"
         state: latest
 
@@ -16,7 +16,7 @@
         name: tomcat
 
     - name: Install Java
-      yum:
+      dnf:
         name: java-1.8.0-openjdk
         state: present
 
