@@ -15,9 +15,9 @@
       group:
         name: tomcat
 
-    - name: Install Java
+    - name: Install Java (default version)
       dnf:
-        name: java-1.8.0-openjdk
+        name: java-11-openjdk  # Or java-devel for development tools
         state: present
 
     - name: Create a Tomcat Directory
