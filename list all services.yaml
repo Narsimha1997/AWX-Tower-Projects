@@ -1,0 +1,12 @@
+---
+- name: List all available services
+  hosts: all
+  become: yes
+  tasks:
+    - name: List all services
+      shell: "systemctl list-units --type=service --all"
+      register: services_output
+
+    - name: Show list of all services
+      debug:
+        var: services_output.stdout_lines
