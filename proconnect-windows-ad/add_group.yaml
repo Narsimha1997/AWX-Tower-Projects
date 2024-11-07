@@ -28,7 +28,6 @@
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
-        members:
-           - "{{ ad_domian_group }}"
+        members: "{{ groups | map('regex_replace', '^(.*)$', ad_domain_name + '\\\\' + '\\1') | list }}"
         state: present
 
