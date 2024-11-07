@@ -3,8 +3,6 @@
   hosts: all
   gather_facts: true
   become: false
-  vars:
-    secret_var: "{{ lookup('hashi_vault', 'secret=secret/creds token=s.4YRTM9ChE1JR4mDaDABUsfyZ url=http://54.235.206.14:8200') }}"
   tasks:
     - name: "Gather Network Interfaces"
       win_shell: Get-NetAdapter | Select-Object -ExpandProperty Name
@@ -14,15 +12,15 @@
       win_dns_client:
           adapter_names: "{{ network_interfaces.stdout_lines | join(',') }}"
           ipv4_addresses:
-          - 54.145.133.236
+          - "{{ ip_address }}"
       register: dns_details
 
     - name: "Join Domain"
       win_domain_membership:
-        dns_domain_name: proconnect.local
+        dns_domain_name: "{{ ad_domain_name }}"
         hostname: "{{ ansible_hostname }}"
-        domain_admin_user: vinayak@proconnect.local 
-        domain_admin_password: "{{ secret_var.secret }}"
+        domain_admin_user: "{{ ad_admin_user }}"
+        domain_admin_password: "{{ ad_admin_password }}"
         state: domain
       register: domain_state
     - win_reboot:
@@ -31,6 +29,6 @@
       win_group_membership:
         name: Remote Desktop Users
         members:
-           - proconnect\Proconnect-Super-Admin
+           - "{{ ad_domian_group }}"
         state: present
 
