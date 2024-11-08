@@ -29,6 +29,6 @@
       win_group_membership:
         name: Remote Desktop Users
         members:
-          - "{{ ad_domain_name }}\\{{ groups }}"
+          - "{{ groups }}"
         state: present
 
