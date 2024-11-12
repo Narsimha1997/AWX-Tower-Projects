@@ -36,5 +36,5 @@
       win_group_membership:
         name: Remote Desktop Users
         members: 
-           - proconnect\Proconnect-Backend-Developers
+           - proconnect\Proconnect-Proconnect-Developers
         state: present
