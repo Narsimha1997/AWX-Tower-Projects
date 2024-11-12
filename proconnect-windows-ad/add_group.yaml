@@ -33,5 +33,5 @@
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
-        members: "{{ groups }}"
+        members: "{{ groups | list }}"
         state: present
