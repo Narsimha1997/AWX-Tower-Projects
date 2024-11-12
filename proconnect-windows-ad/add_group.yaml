@@ -28,7 +28,7 @@
       register: domain_state
 
     - win_reboot:
-        when: domain_state.reboot_required
+      when: domain_state.reboot_required
 
     - name: Add AD Group
       win_group_membership:
