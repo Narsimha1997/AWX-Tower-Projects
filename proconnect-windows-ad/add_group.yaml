@@ -2,9 +2,7 @@
 - name: "Windows Firewall"
   hosts: all
   gather_facts: true
-  become: false
-  vars:
-    groups: "{{ domain_groups | map('to_string') | list }}"  # Ensures groups is a list of strings
+  become: false  # Ensures groups is a list of strings
 
   tasks:
     - name: "Gather Network Interfaces"
@@ -33,5 +31,5 @@
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
-        members: "{{ groups | list }}" 
+        members: "{{ domain_groups | list }}" 
         state: present
