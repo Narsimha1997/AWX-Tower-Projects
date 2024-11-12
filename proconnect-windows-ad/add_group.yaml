@@ -35,6 +35,5 @@
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
-        members: 
-           - proconnect\Proconnect-Proconnect-Developers
+        members: "{{ domain_groups | list }}"
         state: present
