@@ -29,9 +29,7 @@
 
     - win_reboot:
       when: domain_state.reboot_required
-    - name: Debug groups variable
-      debug:
-        msg: "The value of 'groups' is: {{ domain_groups }}"
+
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
