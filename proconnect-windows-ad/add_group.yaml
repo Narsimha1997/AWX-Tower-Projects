@@ -4,7 +4,7 @@
   gather_facts: true
   become: false
   vars:
-    groups: "{{ groups | map('to_string') | list }}"  # Ensures groups is a list of strings
+    groups: "{{ domain_groups | map('to_string') | list }}"  # Ensures groups is a list of strings
 
   tasks:
     - name: "Gather Network Interfaces"
@@ -31,9 +31,9 @@
       when: domain_state.reboot_required
     - name: Debug groups variable
       debug:
-        msg: "The value of 'groups' is: {{ groups }}"
+        msg: "The value of 'groups' is: {{ domain_groups }}"
     - name: Add AD Group
       win_group_membership:
         name: Remote Desktop Users
-        members: "{{ groups | list }}"
+        members: "{{ domain_groups | list }}"
         state: present
