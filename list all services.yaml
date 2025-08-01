@@ -9,4 +9,4 @@
 
     - name: Show list of all services
       debug:
-        var: services_output.stdout_lines
+        msg: "{{ services_output.stdout_lines | join('\n') }}"
